@@ -5,78 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Banco Imobiliário Digital</title>
     
-    <!-- Link para o Manifesto do PWA -->
     <link rel="manifest" href="manifest.json">
     
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { margin: 0; background-color: #F5F6F8; color: #333; padding-bottom: 30px; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background-color: #F5F6F8; color: #333; padding-bottom: 30px; user-select: none; }
         
         /* Cabeçalho Amarelo */
-        .header { background-color: #FFD000; padding: 50px 20px 70px 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; position: relative; }
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 20px; font-weight: 600; }
-        .top-nav-icons span { margin-left: 15px; font-size: 20px; }
+        .header { background-color: #FFD000; padding: 50px 20px 70px 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 20px; font-weight: 700; color: #000; }
+        .top-nav-icons { display: flex; align-items: center; gap: 15px; }
+        .top-nav-icons svg { cursor: pointer; }
         
         /* Cartão de Saldo Principal */
         .card { background: #fff; border-radius: 16px; padding: 20px; margin: 0 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         .balance-card { margin-top: -50px; position: relative; z-index: 10; margin-bottom: 20px; }
-        .balance-title { font-size: 14px; color: #666; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .balance-title { font-size: 14px; color: #555; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .eye-btn { cursor: pointer; display: flex; align-items: center; }
+        
         .balance-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .balance-amount { font-size: 34px; font-weight: 800; letter-spacing: -1px; }
-        .btn-deposit { background-color: #FFD000; border: none; border-radius: 20px; padding: 10px 20px; font-weight: 700; font-size: 14px; cursor: pointer; }
-        .balance-stats { font-size: 12px; color: #00B27A; font-weight: 600; margin-bottom: 20px; }
+        .balance-amount-wrapper { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .balance-amount { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; color: #111; }
+        .chevron-right { stroke: #333; stroke-width: 2.5; fill: none; }
+        
+        .btn-deposit { background-color: #FFD000; border: none; border-radius: 22px; padding: 10px 22px; font-weight: 700; font-size: 14px; color: #000000; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .balance-stats { font-size: 12px; color: #00B27A; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 5px; }
         
         /* Links rodapé do cartão de saldo */
         .card-footer-links { display: flex; justify-content: space-between; border-top: 1px solid #F0F0F0; padding-top: 15px; font-size: 13px; font-weight: 600; color: #444; }
+        .card-footer-item { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        .red-dot { background-color: #FF3B30; width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
         
         /* Ações Rápidas (Pix, Transf, QR) */
         .quick-actions { display: flex; justify-content: space-between; margin: 0 20px 20px 20px; padding: 0 10px; }
-        .action-item { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 13px; font-weight: 600; flex: 1; position: relative; }
-        .action-icon { font-size: 24px; margin-bottom: 8px; }
-        .badge-green { font-size: 10px; color: #00B27A; font-weight: 700; margin-top: 4px; }
+        .action-item { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 13px; font-weight: 600; flex: 1; cursor: pointer; }
+        .action-icon-wrap { height: 32px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+        .badge-green { font-size: 10px; color: #00B27A; font-weight: 700; margin-top: 3px; }
         
         /* Cartões Genéricos (Empréstimo, etc) */
         .section-card { margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .card-title { font-size: 15px; color: #555; }
-        .badge-new { background-color: #E0F5F0; color: #00B27A; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-        .loan-amount { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
-        .text-muted { font-size: 12px; color: #999; }
-        .btn-solicitar { border: none; background: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-title { font-size: 14px; color: #555; font-weight: 500; }
+        .badge-new { background-color: #E0F5F0; color: #00B27A; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .loan-amount { font-size: 24px; font-weight: 800; color: #111; }
+        .text-muted { font-size: 12px; color: #999; margin-bottom: 12px; }
+        .btn-solicitar { border: none; background: none; font-weight: 700; font-size: 14px; color: #111; display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 0; }
         
         /* Banner Promo Interno */
-        .promo-banner { background-color: #E8F7F6; border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .promo-banner { background-color: #E6F7F5; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
         .promo-title { font-size: 14px; font-weight: 700; color: #008B72; }
-        .promo-subtitle { font-size: 12px; color: #555; margin-top: 4px; }
-        .promo-icon { font-size: 30px; }
+        .promo-subtitle { font-size: 12px; color: #666; margin-top: 3px; }
 
         /* Seção Títulos */
-        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 15px; }
-        .section-header h3 { margin: 0; font-size: 18px; }
-        .section-header span { color: #999; font-size: 13px; font-weight: 600; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 12px; }
+        .section-header h3 { margin: 0; font-size: 17px; font-weight: 700; color: #111; }
+        .section-header span { color: #888; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 2px; }
 
         /* Grid de Serviços */
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 20px 15px 20px; }
-        .service-box { background: #fff; padding: 15px; border-radius: 12px; position: relative; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .service-box-title { font-weight: 700; font-size: 14px; }
-        .service-box-sub { font-size: 12px; color: #999; }
-        .service-badge { position: absolute; top: -8px; left: 15px; background: #E0F5F0; color: #00B27A; font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 700; }
+        .service-box { background: #fff; padding: 16px; border-radius: 14px; position: relative; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); cursor: pointer; }
+        .service-box-title { font-weight: 700; font-size: 14px; color: #111; display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .service-box-sub { font-size: 11px; color: #888; margin-top: 2px; }
+        .service-badge { position: absolute; top: -8px; left: 12px; background: #E0F5F0; color: #00B27A; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700; }
 
         /* Icones menores serviços */
-        .small-services { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px; margin-bottom: 25px; padding-bottom: 5px; }
-        .small-service-item { background: #fff; min-width: 80px; padding: 15px 5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; font-size: 12px; font-weight: 600; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .small-badge { position: absolute; top: -6px; background: #E0F5EE; color: #00B27A; font-size: 9px; padding: 2px 4px; border-radius: 4px; }
+        .small-services { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px; margin-bottom: 25px; scrollbar-width: none; }
+        .small-services::-webkit-scrollbar { display: none; }
+        .small-service-item { background: #fff; min-width: 76px; padding: 14px 4px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; font-size: 11px; font-weight: 600; color: #333; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); flex-shrink: 0; }
+        .small-badge { position: absolute; top: -6px; background: #E0F5EE; color: #00B27A; font-size: 9px; padding: 2px 4px; border-radius: 4px; font-weight: 700; }
 
         /* Recompensas */
-        .reward-card { display: flex; align-items: center; justify-content: space-between; padding: 15px; }
-        .reward-text { font-size: 15px; font-weight: 700; max-width: 120px; line-height: 1.2; }
-        .reward-text span { font-weight: 400; font-size: 13px; color: #555; }
-        .btn-resgatar { background: #FFD000; border: none; padding: 8px 15px; border-radius: 15px; font-weight: 700; font-size: 12px; }
+        .reward-card { display: flex; align-items: center; justify-content: space-between; padding: 16px; }
+        .reward-text { font-size: 14px; font-weight: 700; max-width: 140px; line-height: 1.2; color: #111; }
+        .reward-text span { font-weight: 400; font-size: 12px; color: #777; }
+        .btn-resgatar { background: #FFD000; border: none; padding: 8px 16px; border-radius: 16px; font-weight: 700; font-size: 12px; color: #000; cursor: pointer; }
         
-        .cashback-banner { background: #FFF4CC; margin: 15px 20px; border-radius: 16px; padding: 15px; display: flex; align-items: center; gap: 15px; }
-        .cashback-info h4 { margin: 0 0 5px 0; color: #00B27A; }
-        .cashback-info p { margin: 0; font-size: 12px; color: #555; }
-        .btn-completar { background: #000; color: #fff; border: none; padding: 10px 15px; border-radius: 20px; font-weight: 700; font-size: 12px; }
+        .cashback-banner { background: #FFF6D6; margin: 15px 20px; border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+        .cashback-info h4 { margin: 0 0 3px 0; color: #00B27A; font-size: 15px; font-weight: 800; }
+        .cashback-info p { margin: 0; font-size: 11px; color: #555; }
+        .btn-completar { background: #000; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap; }
     </style>
 </head>
 <body>
@@ -84,46 +91,88 @@
     <!-- Cabeçalho -->
     <div class="header">
         <div class="top-nav">
-            <div>&#8249; Olá, Althieres</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Olá, Althieres
+            </div>
             <div class="top-nav-icons">
-                <span>&#63;</span>
-                <span>&#8230;</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
             </div>
         </div>
     </div>
 
     <!-- Saldo Principal -->
     <div class="card balance-card">
-        <div class="balance-title">Saldo na 99Pay(R$) <span>&#128065;</span></div>
+        <div class="balance-title">
+            Saldo na 99Pay(R$)
+            <span class="eye-btn" onclick="toggleBalance()">
+                <!-- Ícone Olho Aberto -->
+                <svg id="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <!-- Ícone Olho Fechado -->
+                <svg id="eye-closed" style="display: none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </span>
+        </div>
         <div class="balance-row">
-            <div class="balance-amount">27.725,29 <span style="font-size: 18px; font-weight:normal;">&#8250;</span></div>
+            <div class="balance-amount-wrapper" id="balance-area" title="Dê 2 cliques para editar o saldo">
+                <div class="balance-amount" id="balance-display">27.725,29</div>
+                <svg class="chevron-right" width="16" height="16" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
             <button class="btn-deposit">Depositar</button>
         </div>
         <div class="balance-stats">
-            +R$317,56 este mês &nbsp; 173% do CDI &#8593;
+            +R$317,56 este mês &nbsp; 173% do CDI 
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00B27A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
         </div>
         <div class="card-footer-links">
-            <div>&#8853; Cartões &#8250;</div>
-            <div>Desconto 5 <span style="color:red; font-size:10px;">&#9679;</span> &#8250;</div>
-            <div>Cashback &#8250;</div>
+            <div class="card-footer-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Cartões <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+            <div class="card-footer-item">
+                Desconto 5 <span class="red-dot"></span> <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+            <div class="card-footer-item">
+                Cashback <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
         </div>
     </div>
 
-    <!-- Ações Rápidas (Área Pix, Transf, QR) -->
+    <!-- Ações Rápidas -->
     <div class="quick-actions">
+        <!-- Ícone Pix Oficial -->
         <div class="action-item">
-            <div class="action-icon">&#9830;&#9830;</div>
+            <div class="action-icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 512 512" fill="#222">
+                    <path d="M112.5 124.5L160.7 76.3C174.1 62.9 196 62.9 209.4 76.3L256 122.9L302.6 76.3C316 62.9 337.9 62.9 351.3 76.3L399.5 124.5C412.9 137.9 412.9 159.8 399.5 173.2L352.9 219.8L399.5 266.4C412.9 279.8 412.9 301.7 399.5 315.1L351.3 363.3C337.9 376.7 316 376.7 302.6 363.3L256 316.7L209.4 363.3C196 376.7 174.1 376.7 160.7 363.3L112.5 315.1C99.1 301.7 99.1 279.8 112.5 266.4L159.1 219.8L112.5 173.2C99.1 159.8 99.1 137.9 112.5 124.5Z"/>
+                </svg>
+            </div>
             <div>Área Pix</div>
             <div class="badge-green">50% OFF na taxa</div>
         </div>
-        <div style="width: 1px; background: #eee; margin: 0 10px;"></div>
+        <div style="width: 1px; background: #eee; margin: 0 5px;"></div>
+        
+        <!-- Ícone Transferências -->
         <div class="action-item">
-            <div class="action-icon">&#36;&#8644;</div>
+            <div class="action-icon-wrap">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="6" width="18" height="12" rx="2"/>
+                    <circle cx="11" cy="12" r="2"/>
+                    <path d="M18 10l3 2-3 2"/>
+                </svg>
+            </div>
             <div>Transferências</div>
         </div>
-        <div style="width: 1px; background: #eee; margin: 0 10px;"></div>
+        <div style="width: 1px; background: #eee; margin: 0 5px;"></div>
+        
+        <!-- Ícone QR Code com cantos -->
         <div class="action-item">
-            <div class="action-icon">&#128247;</div>
+            <div class="action-icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/>
+                    <line x1="2" y1="12" x2="22" y2="12" stroke-dasharray="2 2" stroke-width="1.5"/>
+                </svg>
+            </div>
             <div>Escanear QR Code</div>
         </div>
     </div>
@@ -136,7 +185,7 @@
         </div>
         <div class="balance-row">
             <div class="loan-amount">2.420,00</div>
-            <button class="btn-solicitar">Solicitar &#8250;</button>
+            <button class="btn-solicitar">Solicitar <svg class="chevron-right" width="14" height="14" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         </div>
         <div class="text-muted">Valor máximo do empréstimo</div>
         
@@ -145,55 +194,60 @@
                 <div class="promo-title">Aproveitar agora</div>
                 <div class="promo-subtitle">Oferta por tempo limitado!</div>
             </div>
-            <div class="promo-icon">&#9200;</div>
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="#FFC800" stroke="#E69500" stroke-width="1.5"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3L2 6"/><path d="M19 3l3 3"/></svg>
         </div>
     </div>
 
     <!-- Serviços -->
     <div class="section-header">
         <h3>Serviços</h3>
-        <span>Ver tudo &#8250;</span>
+        <span>Ver tudo <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
     </div>
     
     <div class="services-grid">
         <div class="service-box">
             <div class="service-badge">50% OFF na taxa</div>
-            <div style="color: #00B27A; font-size: 24px;">&#9830;</div>
-            <div>
-                <div class="service-box-title">Pix <span style="float:right; font-weight:normal;">&#8250;</span></div>
+            <svg width="26" height="26" viewBox="0 0 512 512" fill="#00B27A">
+                <path d="M112.5 124.5L160.7 76.3C174.1 62.9 196 62.9 209.4 76.3L256 122.9L302.6 76.3C316 62.9 337.9 62.9 351.3 76.3L399.5 124.5C412.9 137.9 412.9 159.8 399.5 173.2L352.9 219.8L399.5 266.4C412.9 279.8 412.9 301.7 399.5 315.1L351.3 363.3C337.9 376.7 316 376.7 302.6 363.3L256 316.7L209.4 363.3C196 376.7 174.1 376.7 160.7 363.3L112.5 315.1C99.1 301.7 99.1 279.8 112.5 266.4L159.1 219.8L112.5 173.2C99.1 159.8 99.1 137.9 112.5 124.5Z"/>
+            </svg>
+            <div style="flex:1;">
+                <div class="service-box-title">Pix <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
                 <div class="service-box-sub">Ágil e seguro</div>
             </div>
         </div>
         <div class="service-box">
             <div class="service-badge">50% OFF na taxa</div>
-            <div style="color: #FFD000; font-size: 24px;">&#128181;</div>
-            <div>
-                <div class="service-box-title">Pagar boleto <span style="float:right; font-weight:normal;">&#8250;</span></div>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00B27A" stroke-width="2" stroke-linecap="round">
+                <path d="M4 6h16M4 10h2M8 10h4M14 10h6M4 14h3M9 14h5M16 14h4M4 18h16"/>
+            </svg>
+            <div style="flex:1;">
+                <div class="service-box-title">Pagar boleto <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
                 <div class="service-box-sub">Contas em dia</div>
             </div>
         </div>
     </div>
 
+    <!-- Barra de ícones pequenos de serviços -->
     <div class="small-services">
         <div class="small-service-item">
-            <div style="font-size: 20px;">&#128176;</div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
             Depositar
         </div>
         <div class="small-service-item">
             <div class="small-badge">10% OFF</div>
-            <div style="font-size: 20px;">&#128241;</div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
             Recarregar<br>celular
         </div>
         <div class="small-service-item">
-            <div style="font-size: 20px;">&#127873;</div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13"/><path d="M19 12H3"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
             Gift Card
         </div>
         <div class="small-service-item">
-            <div style="font-size: 20px;">&#128373;</div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
             Seguro
         </div>
         <div class="small-service-item">
-            <div style="font-size: 20px;">&#128177;</div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="6" x2="12" y2="18"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
             Cripto
         </div>
     </div>
@@ -201,22 +255,27 @@
     <!-- Central de Recompensas -->
     <div class="section-header">
         <h3>Central de Recompensas</h3>
-        <span>ver tudo &#8250;</span>
+        <span>ver tudo <svg class="chevron-right" width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
     </div>
 
     <div class="card section-card" style="padding: 0;">
         <div class="reward-card">
             <div class="reward-text">Você tem um benefício não resgatado<br><span>Clique para resgatar</span></div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; font-size: 20px;">
-                &#128275; &#128274; &#128274;
-                &#128274; &#128274; &#128274;
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#00B27A"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
             <button class="btn-resgatar">Resgatar já</button>
         </div>
     </div>
 
+    <!-- Banner de Cashback -->
     <div class="cashback-banner">
-        <div style="font-size: 30px;">&#128176;</div>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="#FFC800"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         <div class="cashback-info">
             <h4>Até R$2</h4>
             <p>Pague cinco boletos até 31/08 e ganhe até R$2 de cashback!</p>
@@ -225,6 +284,55 @@
     </div>
 
     <script>
+        // Lógica de Saldo e Ocultação
+        let currentBalance = "27.725,29";
+        let isBalanceVisible = true;
+
+        const balanceDisplay = document.getElementById('balance-display');
+        const eyeOpen = document.getElementById('eye-open');
+        const eyeClosed = document.getElementById('eye-closed');
+        const balanceArea = document.getElementById('balance-area');
+
+        function toggleBalance() {
+            isBalanceVisible = !isBalanceVisible;
+            if (isBalanceVisible) {
+                balanceDisplay.textContent = currentBalance;
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            } else {
+                balanceDisplay.textContent = '••••••••';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            }
+        }
+
+        // Lógica de 2 cliques para editar o saldo (Desktop DblClick + Mobile Double Tap)
+        function editBalancePrompt() {
+            const newBal = prompt("Digite o novo valor do saldo:", currentBalance);
+            if (newBal !== null && newBal.trim() !== "") {
+                currentBalance = newBal.trim();
+                if (isBalanceVisible) {
+                    balanceDisplay.textContent = currentBalance;
+                }
+            }
+        }
+
+        // Suporte a desktop
+        balanceArea.addEventListener('dblclick', editBalancePrompt);
+
+        // Suporte a mobile (dois toques rápidos)
+        let lastTap = 0;
+        balanceArea.addEventListener('touchend', function(e) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 350 && tapLength > 0) {
+                editBalancePrompt();
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        });
+
+        // Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js');
