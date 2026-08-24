@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Imobiliário Digital</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #FFD000; /* Amarelo estilo 99Pay */
+            padding: 40px 20px 60px 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .balance-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin: -40px 20px 20px 20px; /* Sobrepõe o header amarelo */
+        }
+        .balance-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 20px;
+        }
+        .action-button {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="greeting">Olá, Jogador 1</div>
+    </div>
+
+    <div class="balance-container">
+        <div class="balance-title">Saldo Disponível</div>
+        <div class="balance-amount">$ 25.000,00</div>
+    </div>
+
+    <div class="actions-grid">
+        <button class="action-button">💸 Pagar (Pix)</button>
+        <button class="action-button">📸 Cobrar (QR Code)</button>
+    </div>
+
+</body>
+</html>
